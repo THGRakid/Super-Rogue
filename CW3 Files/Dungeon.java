@@ -7,6 +7,8 @@ public class Dungeon {
     private int N;                     // dimension of dungeon
 
     // initialize a new dungeon based on the given board
+    //N * 2N-1 ：实际为N*N, 记录空格
+    //这里为读取地图数据，标记地点数据
     public Dungeon(char[][] board) {
         N = board.length;
         isRoom     = new boolean[N][N];
@@ -22,6 +24,7 @@ public class Dungeon {
     // return dimension of dungeon
     public int size() { return N; }
 
+    // 判断超过墙壁没
     // does v correspond to a corridor site? 
     public boolean isCorridor(Site v) {
         int i = v.i();
@@ -30,6 +33,7 @@ public class Dungeon {
         return isCorridor[i][j];
     }
 
+    //判断是否为房间
     // does v correspond to a room site?
     public boolean isRoom(Site v) {
         int i = v.i();
@@ -43,6 +47,7 @@ public class Dungeon {
         return (!isRoom(v) && !isCorridor(v));
     }
 
+    //判断是不是走了一步
     // does v-w correspond to a legal move?
     public boolean isLegalMove(Site v, Site w) {
         int i1 = v.i();

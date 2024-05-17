@@ -15,6 +15,7 @@ public class Site {
     public int j() { return j; }
 
     // Manhattan distance between invoking Site and w
+    // v 和 w 之间的最短直线距离
     public int manhattanTo(Site w) {
         Site v = this;
         int i1 = v.i();

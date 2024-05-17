@@ -17,9 +17,9 @@ import java.io.InputStreamReader;
 import java.io.BufferedReader;
 
 /**
- * 算发实现
+ * 读取文件
  */
-class In {
+class  In {
    private BufferedReader br;
 
    // system independent
