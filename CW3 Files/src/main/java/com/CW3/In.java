@@ -1,3 +1,4 @@
+package com.CW3;
 /******************************************************************************
  *  
  *  A library from Algorithms optional textbook
@@ -55,7 +56,7 @@ class  In {
 
       // try to read file from local file system
       try {
-         URL url = getClass().getResource(s);       // for files, even if included in a jar
+         URL url = getClass().getResource("/Dungeons/" + s);       // for files, even if included in a jar
          if (url == null) url = new URL(s);         // no file found, try a URL
 
          URLConnection site    = url.openConnection();

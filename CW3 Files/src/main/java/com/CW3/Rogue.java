@@ -1,3 +1,5 @@
+package com.CW3;
+
 /**
  * 逃亡者
  */

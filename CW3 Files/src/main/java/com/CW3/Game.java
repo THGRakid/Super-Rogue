@@ -1,3 +1,7 @@
+package com.CW3;
+
+import java.io.IOException;
+
 /**
  * 游戏开始
  */
@@ -97,8 +101,10 @@ public class Game {
     }
 
 
-    public static void main(String[] args) {
-        In stdin = new In();
+    public static void main(String[] args) throws IOException {
+        String FileA = "dungeonA.txt";
+
+        In stdin = new In(FileA);
         Game game = new Game(stdin);
         System.out.println(game);
         game.play();
