@@ -24,6 +24,7 @@ public class Rogue {
 
         // take random legal move
         int n = 0;
+
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 Site site = new Site(i, j);
@@ -35,5 +36,6 @@ public class Rogue {
         }
         return move;
     }
+
 
 }
