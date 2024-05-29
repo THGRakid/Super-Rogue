@@ -1,4 +1,4 @@
-package com.CW3.GraphTest;
+package com.CW3.graphTest;
 
 public class TestDFS {
     public static void main(String[] args) {

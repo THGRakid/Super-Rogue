@@ -9,7 +9,7 @@ public class Game {
 
     // portable newline
     private final static String NEWLINE = System.getProperty("line.separator");
-  
+
     private Dungeon dungeon;     // the dungeon
     private char MONSTER;        // name of the monster (A - Z)
     private char ROGUE = '@';    // name of the rogue
@@ -28,7 +28,7 @@ public class Game {
         for (int i = 0; i < N; i++) {
             String s = in.readLine();
             for (int j = 0; j < N; j++) {
-                board[i][j] = s.charAt(2*j);
+                board[i][j] = s.charAt(2 * j);
 
                 // check for monster's location
                 if (board[i][j] >= 'A' && board[i][j] <= 'Z') {
@@ -40,19 +40,27 @@ public class Game {
                 // check for rogue's location
                 if (board[i][j] == ROGUE) {
                     board[i][j] = '.';
-                    rogueSite  = new Site(i, j);
+                    rogueSite = new Site(i, j);
                 }
             }
         }
         dungeon = new Dungeon(board);
         monster = new Monster(this);
-        rogue   = new Rogue(this);
+        rogue = new Rogue(this);
     }
 
     // return position of monster and rogue
-    public Site getMonsterSite() { return monsterSite; }
-    public Site getRogueSite()   { return rogueSite;   }
-    public Dungeon getDungeon()  { return dungeon;     }
+    public Site getMonsterSite() {
+        return monsterSite;
+    }
+
+    public Site getRogueSite() {
+        return rogueSite;
+    }
+
+    public Dungeon getDungeon() {
+        return dungeon;
+    }
 
 
     // play until monster catches the rogue
@@ -60,7 +68,7 @@ public class Game {
         for (int t = 1; true; t++) {
             System.out.println("Move " + t);
             System.out.println();
-            
+
             // monster moves
             if (monsterSite.equals(rogueSite)) break;
             Site next = monster.move();
@@ -76,9 +84,14 @@ public class Game {
             System.out.println(this);
         }
 
-        System.out.println("Caught by monster");
+        System.out.println("\n------------------------");
+        System.out.println("|   CONGRATULATIONS!    |");
+        System.out.println("|   Monster has won!    |");
+        System.out.println("|   Score: Over 100     |");
+        System.out.println("------------------------\n");
 
     }
+
 
 
     // string representation of game state (inefficient because of Site and string concat)
@@ -88,12 +101,12 @@ public class Game {
             for (int j = 0; j < N; j++) {
                 Site site = new Site(i, j);
                 if (rogueSite.equals(monsterSite) && (rogueSite.equals(site))) s += "* ";
-                else if (rogueSite.equals(site))                               s += ROGUE   + " ";
-                else if (monsterSite.equals(site))                             s += MONSTER + " ";
-                else if (dungeon.isRoom(site))                                 s += ". ";
-                else if (dungeon.isCorridor(site))                             s += "+ ";
-                else if (dungeon.isRoom(site))                                 s += ". ";
-                else if (dungeon.isWall(site))                                 s += "  ";
+                else if (rogueSite.equals(site)) s += ROGUE + " ";
+                else if (monsterSite.equals(site)) s += MONSTER + " ";
+                else if (dungeon.isRoom(site)) s += ". ";
+                else if (dungeon.isCorridor(site)) s += "+ ";
+                else if (dungeon.isRoom(site)) s += ". ";
+                else if (dungeon.isWall(site)) s += "  ";
             }
             s += NEWLINE;
         }
@@ -102,7 +115,7 @@ public class Game {
 
 
     public static void main(String[] args) throws IOException {
-        String FileA = "dungeonK.txt";
+        String FileA = "dungeonR.txt";
 
         In stdin = new In(FileA);
         Game game = new Game(stdin);

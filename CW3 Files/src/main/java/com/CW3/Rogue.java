@@ -1,41 +1,60 @@
 package com.CW3;
 
-/**
- * 逃亡者
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class Rogue {
     private Game game;
     private Dungeon dungeon;
     private int N;
 
     public Rogue(Game game) {
-        this.game    = game;
+        this.game = game;
         this.dungeon = game.getDungeon();
-        this.N       = dungeon.size();
+        this.N = dungeon.size();
     }
 
-
-    // TAKE A RANDOM LEGAL MOVE
-    // YOUR MAIN TASK IS TO RE-IMPLEMENT THIS METHOD TO DO SOMETHING INTELLIGENT
+    /**
+     * 获取盗贼的下一个移动位置
+     * 通过最大化与怪物的距离来选择移动位置
+     * @return 下一个移动位置
+     */
     public Site move() {
         Site monster = game.getMonsterSite();
-        Site rogue   = game.getRogueSite();
-        Site move    = null;
+        Site rogue = game.getRogueSite();
 
-        // take random legal move
-        int n = 0;
+        List<Site> legalMoves = getLegalMoves(rogue);
+        Site bestMove = rogue;
+        int maxDistance = monster.manhattanTo(rogue);
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                Site site = new Site(i, j);
-                if (dungeon.isLegalMove(rogue, site)) {
-                    n++;
-                    if (Math.random() <= 1.0 / n) move = site;
+        for (Site move : legalMoves) {
+            int distance = monster.manhattanTo(move);
+            if (distance > maxDistance) {
+                maxDistance = distance;
+                bestMove = move;
+            }
+        }
+
+        return bestMove;
+    }
+
+    /**
+     * 获取给定位置的所有合法移动
+     * @param site 当前的位置
+     * @return 所有合法移动的位置列表
+     */
+    private List<Site> getLegalMoves(Site site) {
+        List<Site> legalMoves = new ArrayList<>();
+        int[] directions = {-1, 0, 1};
+        for (int di : directions) {
+            for (int dj : directions) {
+                if (di == 0 && dj == 0) continue;
+                Site next = new Site(site.i() + di, site.j() + dj);
+                if (dungeon.isLegalMove(site, next)) {
+                    legalMoves.add(next);
                 }
             }
         }
-        return move;
+        return legalMoves;
     }
-
-
 }

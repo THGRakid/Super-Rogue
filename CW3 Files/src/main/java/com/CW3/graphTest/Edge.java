@@ -1,4 +1,4 @@
-package com.CW3.GraphTest;
+package com.CW3.graphTest;
 
 public class Edge {
     public int u; // Starting vertex of the edge
