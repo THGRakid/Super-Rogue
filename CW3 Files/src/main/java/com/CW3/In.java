@@ -20,7 +20,7 @@ import java.io.BufferedReader;
 /**
  * 读取文件
  */
-class  In {
+public class  In {
    private BufferedReader br;
 
    // system independent

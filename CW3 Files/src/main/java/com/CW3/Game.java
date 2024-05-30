@@ -1,6 +1,9 @@
 package com.CW3;
 
+import javax.swing.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 游戏开始
@@ -18,10 +21,16 @@ public class Game {
     private Site rogueSite;      // location of rogue
     private Monster monster;     // the monster
     private Rogue rogue;         // the rogue
+    private Boolean status = true;      // status of programme
 
+    public Game() {
+    }
+
+    public Game(Boolean status){
+        this.status = status;
+    }
     // initialize board from file
     public Game(In in) {
-
         // read in data
         N = Integer.parseInt(in.readLine());
         char[][] board = new char[N][N];
@@ -62,6 +71,7 @@ public class Game {
         return dungeon;
     }
 
+    public Boolean getStatus() { return status; }
 
     // play until monster catches the rogue
     public void play() {
@@ -92,7 +102,32 @@ public class Game {
 
     }
 
+    public List<Game> playForAWT() {
+        List<Game> displayGame = new ArrayList<>();
 
+        // monster moves
+        if (monsterSite.equals(rogueSite)) {
+            displayGame.add(new Game(false));
+            return displayGame;
+        }
+        Site next = monster.move();
+        if (dungeon.isLegalMove(monsterSite, next)) monsterSite = next;
+        else throw new RuntimeException("Monster caught cheating");
+        displayGame.add(this);
+
+        // rogue moves
+        if (monsterSite.equals(rogueSite)) {
+
+            displayGame.add(new Game(false));
+            return displayGame;
+        }
+        next = rogue.move();
+        if (dungeon.isLegalMove(rogueSite, next)) rogueSite = next;
+        else throw new RuntimeException("Rogue caught cheating");
+        displayGame.add(this);
+
+        return displayGame;
+    }
 
     // string representation of game state (inefficient because of Site and string concat)
     public String toString() {
@@ -111,18 +146,6 @@ public class Game {
             s += NEWLINE;
         }
         return s;
-    }
-
-
-    public static void main(String[] args) throws IOException {
-        String FileA = "dungeonR.txt";
-
-        In stdin = new In(FileA);
-        Game game = new Game(stdin);
-        System.out.println(game);
-        game.play();
-
-
     }
 
 }

@@ -13,7 +13,7 @@ public abstract class AbstractGraph<V> implements Graph<V> {
     /**
      * Add a vertex to the graph
      */
-    @Override
+
     public boolean addVertex(V vertex) {
         if (!vertices.contains(vertex)) {
             vertices.add(vertex);

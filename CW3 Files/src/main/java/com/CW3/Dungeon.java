@@ -3,7 +3,7 @@ package com.CW3;
 /**
  * 整个地牢
  */
-public class Dungeon {
+    public class Dungeon {
     private boolean[][] isRoom;        // is v-w a room site?
     private boolean[][] isCorridor;    // is v-w a corridor site?
     private int N;                     // dimension of dungeon
