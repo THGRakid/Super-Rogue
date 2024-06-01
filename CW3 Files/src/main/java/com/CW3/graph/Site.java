@@ -1,4 +1,4 @@
-package com.CW3;
+package com.CW3.graph;
 
 /**
  * 标记一处地点

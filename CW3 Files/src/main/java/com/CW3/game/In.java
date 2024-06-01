@@ -1,4 +1,4 @@
-package com.CW3;
+package com.CW3.game;
 /******************************************************************************
  *  
  *  A library from Algorithms optional textbook

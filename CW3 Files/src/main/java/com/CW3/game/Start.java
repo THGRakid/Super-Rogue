@@ -1,4 +1,7 @@
-package com.CW3;
+package com.CW3.game;
+
+import com.CW3.game.Game;
+import com.CW3.game.In;
 
 import java.io.IOException;
 

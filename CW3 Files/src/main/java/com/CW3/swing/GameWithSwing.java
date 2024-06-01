@@ -1,7 +1,7 @@
 package com.CW3.swing;
 
-import com.CW3.Game;
-import com.CW3.In;
+import com.CW3.game.Game;
+import com.CW3.game.In;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -47,10 +47,10 @@ public class GameWithSwing extends Game {
                     return;
                 }
 
-                timer = new Timer(1000, new ActionListener() {
+                timer = new Timer(250, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (move >= 50) {
+                        if (move >= 500) {
                             // 停止Timer
                             timer.stop();
                             JOptionPane.showMessageDialog(frame, "The rogue wins ！ ！ ！");
@@ -74,8 +74,6 @@ public class GameWithSwing extends Game {
 
                         // 更新textArea中的文本
                         textArea.append(games.get(0).toString());
-
-
 
                     }
                 });
@@ -126,7 +124,7 @@ public class GameWithSwing extends Game {
         // 创建一个新的JTextArea实例
         textArea = new JTextArea();
         textArea.setEditable(false);
-        textArea.setFont(new Font("Arial", Font.PLAIN, 30)); // 设置字体
+        textArea.setFont(new Font("Consolas", Font.PLAIN, 30)); // 设置字体
 
         // 创建一个新的面板来容纳JTextArea，并使用BorderLayout
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -151,7 +149,7 @@ public class GameWithSwing extends Game {
             @Override
             public void run() {
                 // 创建GameWithSwing类的实例，这会触发GUI的创建和显示
-                String FileA = "dungeonQ.txt";
+                String FileA = "dungeonK.txt";
                 In stdin = new In(FileA);
                 new GameWithSwing(stdin);
 

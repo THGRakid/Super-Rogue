@@ -1,7 +1,10 @@
-package com.CW3;
+package com.CW3.game;
 
-import javax.swing.*;
-import java.io.IOException;
+import com.CW3.action.Monster;
+import com.CW3.action.Rogue;
+import com.CW3.graph.Dungeon;
+import com.CW3.graph.Site;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,8 +124,11 @@ public class Game {
             displayGame.add(new Game(false));
             return displayGame;
         }
-        next = rogue.move();
-        if (dungeon.isLegalMove(rogueSite, next)) rogueSite = next;
+        Site next1 = rogue.move();
+        next = next1;
+        if (dungeon.isLegalMove(rogueSite, next)) {
+            rogueSite = next;
+        }
         else throw new RuntimeException("Rogue caught cheating");
         displayGame.add(this);
 
@@ -135,7 +141,7 @@ public class Game {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 Site site = new Site(i, j);
-                if (rogueSite.equals(monsterSite) && (rogueSite.equals(site))) s += "* ";
+                if (rogueSite.equals(monsterSite) && (rogueSite.equals(site))) s += " * ";
                 else if (rogueSite.equals(site)) s += ROGUE + " ";
                 else if (monsterSite.equals(site)) s += MONSTER + " ";
                 else if (dungeon.isRoom(site)) s += ". ";
