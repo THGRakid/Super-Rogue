@@ -4,12 +4,10 @@ import com.CW3.game.Game;
 import com.CW3.graph.Dungeon;
 import com.CW3.graph.Site;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
-public class Monster {
+public class Monster extends RoleAction{
     private Game game;
     private Dungeon dungeon;
     private int N;
@@ -81,20 +79,5 @@ public class Monster {
         return step;
     }
 
-
-    public List<Site> getLegalMoves(Site site) {
-        List<Site> legalMoves = new ArrayList<>();
-        int[] directions = {-1, 0, 1};
-        for (int di : directions) {
-            for (int dj : directions) {
-                if (di == 0 && dj == 0) continue;
-                Site next = new Site(site.i() + di, site.j() + dj);
-                if (dungeon.isLegalMove(site, next)) {
-                    legalMoves.add(next);
-                }
-            }
-        }
-        return legalMoves;
-    }
 
 }

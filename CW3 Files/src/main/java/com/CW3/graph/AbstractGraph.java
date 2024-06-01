@@ -3,7 +3,6 @@ package com.CW3.graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public abstract class AbstractGraph<V> implements Graph<V> {
     protected boolean[][] isRoom;               // is v-w a room site?
@@ -28,71 +27,14 @@ public abstract class AbstractGraph<V> implements Graph<V> {
         }
     }
 
-    /**
-     * Greedy Algorithm: Dijkstra
-     *
-     * @param u starting point
-     * @param v ending point
-     * @return
-     */
-    public Integer dijkstra(Integer u, Integer v) {
-        // Record the distance between two nodes
-        HashMap<Integer, Integer> distanceToNodes = new HashMap<>();
-        // Stores unprocessed nodes
-        HashMap<Integer, Integer> nodesToProcess = new HashMap<>();
-
-        // Initialize by putting the starting point u into the nodesToProcess and setting the distance to 0
-        nodesToProcess.put(u, 0);
-
-        // Jumps out of while loop when nodesToProcess is empty
-        while (!nodesToProcess.isEmpty()) {
-            // Initializes the minimum node site and minimum distance
-            Integer minNodeID = -1;
-            int minDistance = Integer.MAX_VALUE;
-            // Traverse the nodesToProcess to find the node that is the shortest distance from the starting point
-            for (Map.Entry<Integer, Integer> entry : nodesToProcess.entrySet()) {
-                Integer thisNodeID = entry.getKey();
-                int thisNodeDistance = entry.getValue();
-                // Compare whether the distance of the current node is smaller than the minimum distance found earlier
-                if (thisNodeDistance < minDistance) {
-                    minDistance = thisNodeDistance;
-                    minNodeID = thisNodeID;
-                }
-            }
-            // Take the shortest distance node out
-            nodesToProcess.remove(minNodeID);
-            // Update distance
-            distanceToNodes.put(minNodeID, minDistance);
-
-            for (Integer neighborNodeID : neighbours.get(minNodeID)) {
-                if (distanceToNodes.containsKey(neighborNodeID)) {
-                    continue;
-                }
-
-                if (nodesToProcess.containsKey(neighborNodeID)) {
-                    if (minDistance + 1 < nodesToProcess.get(neighborNodeID)) { // Assuming the edge weight is 1
-                        nodesToProcess.put(neighborNodeID, minDistance + 1); // Update the distance
-                    }
-                } else {
-                    nodesToProcess.put(neighborNodeID, minDistance + 1);
-                }
-            }
-        }
-
-        if (distanceToNodes.containsKey(v)) {
-
-            return distanceToNodes.get(v);
-        }
-        return -1;
-    }
-
-
     // return dimension of dungeon
+    @Override
     public int size() {
         return N;
     }
 
     // does v correspond to a corridor site?
+    @Override
     public boolean isCorridor(Site v) {
         int i = v.i();
         int j = v.j();
@@ -101,6 +43,7 @@ public abstract class AbstractGraph<V> implements Graph<V> {
     }
 
     // does v correspond to a room site?
+    @Override
     public boolean isRoom(Site v) {
         int i = v.i();
         int j = v.j();
@@ -109,11 +52,13 @@ public abstract class AbstractGraph<V> implements Graph<V> {
     }
 
     // does v correspond to a wall site?
+    @Override
     public boolean isWall(Site v) {
         return (!isRoom(v) && !isCorridor(v));
     }
 
     // does v-w correspond to a legal move?
+    @Override
     public boolean isLegalMove(Site v, Site w) {
         int i1 = v.i();
         int j1 = v.j();
@@ -129,5 +74,44 @@ public abstract class AbstractGraph<V> implements Graph<V> {
         if (j1 == j2) return true;
 
         return false;
+    }
+
+    // A method to get the nodeID under a corresponding site
+    @Override
+    public int getNodeIDFromSite(Site site){
+        int i = site.i();
+        int j = site.j();
+        return i*N+j;
+    }
+
+    
+    // Check if this point is a 3x3 grid and if it's valid, it's a neighbor
+    @Override
+    public void addLegalNeighborsToGridNodes(){
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                // Iterate through each point within the grid
+                // Get the center point
+                int nodeID = i * N + j;
+                // Traverse the surrounding 3x3 grid
+                for (int dx = -1; dx <= 1; dx++) {
+                    for (int dy = -1; dy <= 1; dy++) {
+                        if (dx == 0 && dy == 0) {
+                            continue;
+                        }
+                        // Get the id of a point within the 3x3 grid
+                        int centerNeighborID = ((i + dx) * N) + (j + dy);
+                        // If the move is valid
+                        Site center = new Site(i, j);
+                        Site centerNeighbor = new Site(i + dx, j + dy);
+                        // Determine if it's possible to walk there
+                        if (isLegalMove(center, centerNeighbor)) {
+                            neighbours.computeIfAbsent(nodeID, k -> new ArrayList<>()).add(centerNeighborID);
+                        }
+                    }
+                }
+
+            }
+        }
     }
 }

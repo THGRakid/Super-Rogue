@@ -6,14 +6,13 @@ import com.CW3.graph.Site;
 
 import java.util.*;
 
-public class Rogue {
+public class Rogue extends RoleAction{
     private Game game;
     private Dungeon dungeon;
     private int N;
 
     private ArrayList<Integer> corridorList;
     private ArrayList<Integer> connectedCorridorList;
-    private ArrayList<Integer> visitedNodeList;
     private HashMap<Integer, List<Integer>> neighbours;
 
     public Rogue(Game game) {
@@ -22,7 +21,7 @@ public class Rogue {
         this.N = dungeon.size();
         this.neighbours = new HashMap<>();
 
-        addLegalNeighborsToGridNodes();
+        dungeon.addLegalNeighborsToGridNodes();
         initializeCorridorLists();
     }
 
@@ -81,10 +80,6 @@ public class Rogue {
         return Integer.MAX_VALUE; // 如果没有路径
     }
 
-    public boolean hasCycle(int startNodeID) {
-        visitedNodeList = new ArrayList<>();
-        return detectCycleDFS(startNodeID, startNodeID, startNodeID);
-    }
 
     public HashMap<Integer, List<Integer>> getNeighbours() {
         return neighbours;
@@ -94,40 +89,8 @@ public class Rogue {
         return new ArrayList<>(connectedCorridorList);
     }
 
-    public int getNodeIdFromSite(Site site) {
-        int i = site.i();
-        int j = site.j();
-        return i * N + j;
-    }
+    
 
-    public Site getSiteFromNodeId(int ID) {
-        int i = ID / N;
-        int j = ID % N;
-        return new Site(i, j);
-    }
-
-    private void addLegalNeighborsToGridNodes() {
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                int nodeID = i * N + j;
-                for (int dx = -1; dx <= 1; dx++) {
-                    for (int dy = -1; dy <= 1; dy++) {
-                        if (dx == 0 && dy == 0) {
-                            continue;
-                        }
-
-                        int centerNeighborID = ((i + dx) * N) + (j + dy);
-                        Site center = new Site(i, j);
-                        Site centerNeighbor = new Site(i + dx, j + dy);
-
-                        if (dungeon.isLegalMove(center, centerNeighbor)) {
-                            neighbours.computeIfAbsent(nodeID, k -> new ArrayList<>()).add(centerNeighborID);
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     private void initializeCorridorLists() {
         corridorList = new ArrayList<>();
@@ -135,14 +98,14 @@ public class Rogue {
             for (int j = 0; j < N; j++) {
                 Site thisSite = new Site(i, j);
                 if (dungeon.isCorridor(thisSite)) {
-                    corridorList.add(getNodeIdFromSite(thisSite));
+                    corridorList.add(dungeon.getNodeIDFromSite(thisSite));
                 }
             }
         }
 
         connectedCorridorList = new ArrayList<>();
         for (int corridor : corridorList) {
-            if (hasCycle(corridor)) {
+            if (dungeon.ifCyc(corridor)) {
                 connectedCorridorList.add(corridor);
             }
         }
@@ -156,7 +119,7 @@ public class Rogue {
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 if (dx == 0 && dy == 0) {
-                    if (calculateShortestPath(getNodeIdFromSite(rogue), getNodeIdFromSite(monster)) == 1) {
+                    if (calculateShortestPath(dungeon.getNodeIDFromSite(rogue), dungeon.getNodeIDFromSite(monster)) == 1) {
                         continue;
                     }
                 }
@@ -179,7 +142,7 @@ public class Rogue {
         ArrayList<Integer> corridorDistances = new ArrayList<>();
 
         for (Site gridSite : gridSites) {
-            int gridSiteNodeID = getNodeIdFromSite(gridSite);
+            int gridSiteNodeID = dungeon.getNodeIDFromSite(gridSite);
             ArrayList<Integer> connectedCorridors = getSafeCorridors(rogue, monster);
 
             ArrayList<Integer> distancesToCorridors = calculateNodeDistances(gridSiteNodeID, connectedCorridors);
@@ -198,8 +161,8 @@ public class Rogue {
         ArrayList<Integer> connectedCorridors = getConnectedCorridorList();
 
         connectedCorridors.removeIf(corridorNodeID -> {
-            int monsterToCorridor = calculateShortestPath(getNodeIdFromSite(monster), corridorNodeID);
-            int rogueToCorridor = calculateShortestPath(getNodeIdFromSite(rogue), corridorNodeID);
+            int monsterToCorridor = calculateShortestPath(dungeon.getNodeIDFromSite(monster), corridorNodeID);
+            int rogueToCorridor = calculateShortestPath(dungeon.getNodeIDFromSite(rogue), corridorNodeID);
             return rogueToCorridor >= monsterToCorridor;
         });
 
@@ -208,10 +171,10 @@ public class Rogue {
 
     private Site getFurthestSiteFromMonster(ArrayList<Site> gridSites, Site monster) {
         ArrayList<Integer> distancesFromMonster = new ArrayList<>();
-        int monsterNodeID = getNodeIdFromSite(monster);
+        int monsterNodeID = dungeon.getNodeIDFromSite(monster);
 
         for (Site gridSite : gridSites) {
-            int gridSiteNodeID = getNodeIdFromSite(gridSite);
+            int gridSiteNodeID = dungeon.getNodeIDFromSite(gridSite);
             int distance = calculateShortestPath(gridSiteNodeID, monsterNodeID);
             distancesFromMonster.add(distance);
         }
@@ -227,24 +190,6 @@ public class Rogue {
         return gridSites.get(indexOfMinDistance);
     }
 
-    private boolean detectCycleDFS(int nodeID, int parent, int startNodeID) {
-        if (visitedNodeList.contains(nodeID)) {
-            return false;
-        }
-
-        visitedNodeList.add(nodeID);
-
-        for (int neighborNodeID : neighbours.get(nodeID)) {
-            if (neighborNodeID == startNodeID && parent != startNodeID) {
-                return true;
-            }
-
-            if (detectCycleDFS(neighborNodeID, nodeID, startNodeID)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public ArrayList<Integer> calculateNodeDistances(int fromNodeID, ArrayList<Integer> toNodeIDs) {
         ArrayList<Integer> distances = new ArrayList<>();

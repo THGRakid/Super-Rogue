@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 游戏开始
+ * Game Start
  */
 public class Game {
 
