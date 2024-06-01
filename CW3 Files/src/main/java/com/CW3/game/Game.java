@@ -19,7 +19,7 @@ public class Game {
     private Dungeon dungeon;     // the dungeon
     private char MONSTER;        // name of the monster (A - Z)
     private char ROGUE = '@';    // name of the rogue
-    private int N;               // board dimension
+    protected int N;               // board dimension
     private Site monsterSite;    // location of monster
     private Site rogueSite;      // location of rogue
     private Monster monster;     // the monster

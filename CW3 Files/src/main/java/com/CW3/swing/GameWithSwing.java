@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Scanner;
 
 public class GameWithSwing extends Game {
 
@@ -37,7 +38,6 @@ public class GameWithSwing extends Game {
 
     public void createGame(){
        layoutDesign();
-
         // 为按钮添加一个动作监听器，当用户点击按钮时，会执行监听器中的代码
         actionButton.addActionListener(new ActionListener() {
             @Override
@@ -50,7 +50,7 @@ public class GameWithSwing extends Game {
                 timer = new Timer(250, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (move >= 500) {
+                        if (move >= N*N) {
                             // 停止Timer
                             timer.stop();
                             JOptionPane.showMessageDialog(frame, "The rogue wins ！ ！ ！");
@@ -72,13 +72,13 @@ public class GameWithSwing extends Game {
                             return;
                         }
 
-                        // 更新textArea中的文本
+                        //  Update textArea
                         textArea.append(games.get(0).toString());
 
                     }
                 });
 
-                // 开始Timer，每1秒执行一次
+
                 timer.start();
             }
         });
@@ -88,7 +88,7 @@ public class GameWithSwing extends Game {
     public void layoutDesign(){
         /** 创建窗口 */
         // 创建一个新的JFrame实例，并设置标题为"DNF"
-        frame = new JFrame("DNF");
+        frame = new JFrame("Super-Rogue");
         // 设置窗口关闭时的操作为退出程序
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 750);
@@ -149,8 +149,11 @@ public class GameWithSwing extends Game {
             @Override
             public void run() {
                 // 创建GameWithSwing类的实例，这会触发GUI的创建和显示
-                String FileA = "dungeonK.txt";
-                In stdin = new In(FileA);
+                System.out.println("Please enter the capital letters A-U to determine the map you want to select:");
+                Scanner scanner = new Scanner(System.in);
+                String s = scanner.nextLine();
+                String File = "dungeon" + s + ".txt";
+                In stdin = new In(File);
                 new GameWithSwing(stdin);
 
             }

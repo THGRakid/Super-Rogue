@@ -4,6 +4,7 @@ package com.CW3.graph;
  * 标记一处地点
  */
 public class Site {
+    public static final Site DEFAULT_INITIAL_LOCATION = new Site(-1,-1);
     private int i;
     private int j;
 
